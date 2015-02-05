@@ -12,11 +12,32 @@ class LeanManager(object):
     def __init__(self):
         LeanObject.app_settings = [settings.avos_app_id, settings.avos_app_key]
 
-    # Get users' [Context]
+    # Get users' motion rawdata
     # - Send: userId
-    # - Receive: motion(rawdata), poi(GPS or iBeacon), sound(rawData)
+    # - Receive: motion(rawdata)
+    def getUserMotionRawData(self):
+        pass
 
-    #
+    # Get users' poi GPS and iBeacon info
+    # - Send: userId
+    # - Receive: poi(GPS & iBeacon)
+    def getUserPOINativeInfo(self):
+        pass
+
+    # Get users' sound rawdata
+    # - Send: userId
+    # - Receive: sound(rawdata)
+    def getUserSoundRawdata(self):
+        pass
+
+    # Store users' current visible output, which compute by analyser, into leancloud
+    def setUserCurVisibleOutput(self):
+        pass
+
+    # Store users' current senz, which compute by analyser, into leancloud
+        pass
+
+
 
 
 
