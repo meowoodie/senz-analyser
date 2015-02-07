@@ -40,13 +40,13 @@ class DataHandler(object):
     # [Visible Output]
     # * Store the visible output (computed by analyser) into DATABASE
     # - Send: motion(state), poi(type), sound(scence)
-    def setCurVisibleOutput(self):
+    def setCurUserVisibleOutput(self):
         pass
 
     # [Senz]
     # * Store the senz (computed by analyser) into DATABASE
     # - Send: senz
-    def setCurSenz(self):
+    def setCurUserSenz(self):
         pass
 
 

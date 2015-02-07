@@ -1,18 +1,27 @@
 import requests
 import json
+import settings
 
 class AVObject(object):
     base = r'https://leancloud.cn' #cn.avoscloud.com
+    # The operation about class
+    # - create class obj: /1.1/classes/<className>            [POST]
+    # - get class obj   : /1.1/classes/<className>/<objectId> [GET]
+    # - update class obj: /1.1/classes/<className>/<objectId> [PUT]
+    # - query class obj : /1.1/classes/<className>            [GET]
+    # - delete class obj: /1.1/classes/<className>/<objectId> [DELETE]
     base_classes = base+r'/1.1/classes/'
-    base_patch = base+r'/1.1/batch'
+    # The operation about users in IM system
+    # - Here we have not use this func
     Users = base+r'/1.1/users'
-    app_settings = ['', '']
+    # Useless
+    base_patch = base+r'/1.1/batch'
+    app_settings = [settings.avos_app_id, settings.avos_app_key]
 
     def __init__(self):
         pass
 
-    #private methods
-
+    # --- PRIVATE METHOD ---
     @classmethod
     def headers(cls):
         # Since properties only work on instances, need define headers property in meta class
@@ -25,7 +34,7 @@ class AVObject(object):
     @classmethod
     def _save_to_avos(cls, cls_name, data):
         if type(data) == list:
-            #save many object
+            # save many object
             patch_ob_list = [{"method": "POST",
                               "path": "/1.1/classes/"+cls_name,
                               "body": ob} for ob in data]
@@ -33,7 +42,7 @@ class AVObject(object):
                 patch_ob_list
             )
         else:
-            #save single object
+            # save single object
             return requests.post(
                 AVObject.base_classes+cls_name,
                 data=json.dumps(data),
@@ -46,9 +55,12 @@ class AVObject(object):
         get_url = AVObject.base_classes+cls_name
         get_url = get_url + '/' + ob_id if ob_id else get_url
 
-        #kpara = include, where, limit, order
         with_params = {}
+        # Extract the condition from kwargs
+        # kpara = include, where, limit, order
         for kparam, vparam in kwargs.items():
+            # Transfer vparam from json to string
+            # And store the string as value, kparam as key into dict named with_params
             with_params[kparam] = json.dumps(vparam)
 
         return requests.get(
@@ -61,7 +73,7 @@ class AVObject(object):
     @classmethod
     def _update_avos(cls, cls_name, data, plus_ob={}):
         if type(data) == list:
-            #update many object
+            # update many object
             patch_ob_list = [{"method": "PUT",
                               "path": "/1.1/classes/"+cls_name+"/"+ob['objectId'],
                               "body": ob} for ob in data]
@@ -72,7 +84,7 @@ class AVObject(object):
         elif type(data) == dict or type(data) == str:
             ob_id = data['objectId'] if type(data) == dict else data
 
-            #check plus_ob
+            # check plus_ob
             if type(plus_ob) != dict:
                 return None
 
@@ -89,7 +101,7 @@ class AVObject(object):
     @classmethod
     def _remove_avos(cls, cls_name, data):
         if type(data) == list:
-            #remove many objects
+            # remove many objects
             patch_ob_list = [{"method": "DELETE",
                               "path": "/1.1/classes/"+cls_name+"/"+ob['objectId']}
                              for ob in data]
@@ -97,7 +109,7 @@ class AVObject(object):
                 patch_ob_list
             )
         elif type(data) == dict or type(data) == str:
-            #remove single object
+            # remove single object
             ob_id = data['objectId'] if type(data) == dict else data
             remove_url = AVObject.base_classes + cls_name + '/' + ob_id
             return requests.delete(
@@ -108,6 +120,7 @@ class AVObject(object):
         else:
             return None
 
+    # Post a list of data to leancloud.
     @classmethod
     def _patch_avos(cls, patch_ob_list):
         return requests.post(
@@ -117,7 +130,7 @@ class AVObject(object):
             verify=False
         )
 
-    #utility function
+    # --- PUBLIC METHOD ---
     @staticmethod
     def pointer(ob, cls_name):
         if type(ob) == dict and ob.get('objectId', None) \
@@ -155,10 +168,10 @@ class AVObject(object):
 
     @staticmethod
     def or_query(where_ob_list):
-        #`where={"$or":[{"wins":{"$gt":150}},{"wins":{"$lt":5}}]}`
+        # `where={"$or":[{"wins":{"$gt":150}},{"wins":{"$lt":5}}]}`
         return {"$or": where_ob_list}
 
-    #class methods
+    # --- CLASS METHOD ---
     @classmethod
     def save(cls, ob):
         """
@@ -245,7 +258,3 @@ class AVObject(object):
         :return: return list of response object containing status `[{"success":{}}]`
         """
         return cls._remove_avos(cls.__name__, ob_list)
-
-class LeanObject(AVObject):
-    def __init__(self):
-        super(LeanObject, self).__init__()

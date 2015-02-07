@@ -1,4 +1,4 @@
-from lean_obj import LeanObject
+from lean_obj import AVObject
 import json
 import datetime
 import requests
@@ -7,35 +7,100 @@ import settings
 import warnings
 warnings.filterwarnings("ignore")
 
+class UserMotion(AVObject):
+
+    DEFAULT_STATE   = 'SITTING'
+    DEFAULT_RAWDATA = {}
+
+    def __init__(self, user_id=None):
+        super(UserMotion, self).__init__()
+        self.rawData = self.DEFAULT_RAWDATA
+        self.state   = self.DEFAULT_MOTION
+        self.userId  = user_id
+
+        if user_id is not None:
+            # Get the latest motion rawdata.
+            result = self.get(self.userId)
+            # Decode result as dict.
+
+            # Store the motion rawData in private member.
+
+    def getState(self):
+        pass
+
+    def saveState(self):
+        pass
+
+
+
+class UserSound(AVObject):
+
+    DEFAULT_SCENCE  = 'INSIDE'
+    DEFAULT_RAWDATA = {}
+
+    def __init__(self, user_id=None):
+        super(UserSound, self).__init__()
+        self.rawData = self.DEFAULT_RAWDATA
+        self.scence  = self.DEFAULT_SCENCE
+        self.userId  = user_id
+
+        if user_id is not None:
+            result = self.get(self.userId)
+
+    def getScence(self):
+        pass
+
+    def saveScence(self):
+        pass
+
+
+
+class UserPOI(AVObject):
+
+    def __init__(self):
+        super(UserPOI, self).__init__()
+
+class UserSenz(AVObject):
+
+    def __init__(self):
+        super(UserSenz, self).__init__()
+
+
+
 class LeanManager(object):
 
     def __init__(self):
-        LeanObject.app_settings = [settings.avos_app_id, settings.avos_app_key]
+        pass
 
     # Get users' motion rawdata
     # - Send: userId
     # - Receive: motion(rawdata)
-    def getUserMotionRawData(self):
+    def getMotionRawdata(self):
+
         pass
 
     # Get users' poi GPS and iBeacon info
     # - Send: userId
     # - Receive: poi(GPS & iBeacon)
-    def getUserPOINativeInfo(self):
+    def getPOINativeInfo(self):
         pass
 
     # Get users' sound rawdata
     # - Send: userId
     # - Receive: sound(rawdata)
-    def getUserSoundRawdata(self):
+    def getSoundRawdata(self):
         pass
 
     # Store users' current visible output, which compute by analyser, into leancloud
-    def setUserCurVisibleOutput(self):
+    def setVisibleOutput(self):
         pass
 
     # Store users' current senz, which compute by analyser, into leancloud
+    def setSenz(self):
         pass
+
+
+
 
 
 
