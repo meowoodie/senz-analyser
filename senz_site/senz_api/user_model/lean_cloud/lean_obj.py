@@ -10,7 +10,8 @@ class AVObject(object):
     # - update class obj: /1.1/classes/<className>/<objectId> [PUT]
     # - query class obj : /1.1/classes/<className>            [GET]
     # - delete class obj: /1.1/classes/<className>/<objectId> [DELETE]
-    base_classes = base+r'/1.1/classes/'
+    base_classes = base+r'/1.1/classes'
+    base_cql = base+r'/1.1/cloudQuery'
     # The operation about users in IM system
     # - Here we have not use this func
     Users = base+r'/1.1/users'
@@ -258,3 +259,5 @@ class AVObject(object):
         :return: return list of response object containing status `[{"success":{}}]`
         """
         return cls._remove_avos(cls.__name__, ob_list)
+
+    
