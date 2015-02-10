@@ -7,8 +7,6 @@ class UserMotion(AVObject):
 
     DEFAULT_STATE       = "SITTING"
     DEFAULT_MOTION_DATA = {}
-    URL_MOTION_SERVICE  = "http://120.27.30.239:9001/predictByRawData"
-
 
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from LeanCloud
@@ -33,7 +31,7 @@ class UserMotion(AVObject):
         # - eg. motion_data = [{...},{...}]
         self.motionData = self._getLatestMotionDataByUserId(self.userId)
 
-        self.motionData = {'timestamp':5857542057676,'values':[7.8529816,7.1790137,4.2999864],'sensorName':'acc','accuracy':0}
+        # self.motionData = {'timestamp':5857542057676,'values':[7.8529816,7.1790137,4.2999864],'sensorName':'acc','accuracy':0}
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(self.motionData)
 
@@ -63,13 +61,15 @@ class UserMotion(AVObject):
             "rawData": motion_data
         }
         # Query the motion state
-        requests.post(
+        response = requests.post(
             self.URL_MOTION_SERVICE,
             params=param,
             verify=False
         )
+        print response.content
 
     def _saveStateIntoDatabase(self, state):
+        pass
 
 
 
