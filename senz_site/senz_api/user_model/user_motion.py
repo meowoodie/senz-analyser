@@ -1,12 +1,14 @@
 # from senz_api.lean_cloud.lean_obj import AVObject
 from lean_cloud.lean_obj import AVObject
 import json
-import datetime
+import requests
 
 class UserMotion(AVObject):
 
-    DEFAULT_STATE       = 'SITTING'
+    DEFAULT_STATE       = "SITTING"
     DEFAULT_MOTION_DATA = {}
+    URL_MOTION_SERVICE  = "http://120.27.30.239:9001/predictByRawData"
+
 
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from LeanCloud
@@ -29,39 +31,48 @@ class UserMotion(AVObject):
         # Get the set of latest motion data according to user id from LeanCloud.
         # - The motion data is a list.
         # - eg. motion_data = [{...},{...}]
-        self.motionData = self._getLatestMotionDataByUserId(user_id)
+        self.motionData = self._getLatestMotionDataByUserId(self.userId)
 
+        self.motionData = {'timestamp':5857542057676,'values':[7.8529816,7.1790137,4.2999864],'sensorName':'acc','accuracy':0}
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(self.motionData)
 
         # Store the result(state of motion data) into LeanCloud.
         self._saveStateIntoDatabase(self.state)
 
-
-
-        # Store the motion rawData in private member.
-
     def _getLatestMotionDataByUserId(self, user_id):
+        # Init the param
         param = {
-            'userIdString': user_id, # Select items which userId is equal to user_id.
+            "userIdString": user_id, # Select items which userId is equal to user_id.
         }
         # Get the latest motion rawdata from LeanCloud
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
             limit=100,         # Select the latest 100 item of result.
-            include="rawData, timestamp"
+            include="rawData"
         )
         # return the motion data list
-        return json.loads(response.content)['results']
+        # - If there is no results, it will return an empty list.(eg. [])
+        return json.loads(response.content)["results"]
 
     def _queryMotionStateByMotionData(self, motion_data):
-        pass
+        # Init the param
+        param = {
+            "clfType": ["SS"],
+            "rawData": motion_data
+        }
+        # Query the motion state
+        requests.post(
+            self.URL_MOTION_SERVICE,
+            params=param,
+            verify=False
+        )
 
     def _saveStateIntoDatabase(self, state):
-        pass
+
 
 
 if __name__ == "__main__":
 
-    m = UserMotion('54d82fefe4b0d414801050ee')
+    m = UserMotion("54d82fefe4b0d414801050ee")
