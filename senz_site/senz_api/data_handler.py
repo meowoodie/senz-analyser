@@ -4,6 +4,8 @@ class DataHandler(object):
     def __init__(self, user_id):
         self._userId = user_id
 
+
+
     # --- QUERY EVENT ---
 
     # [Context]
@@ -13,6 +15,8 @@ class DataHandler(object):
     def getUserContext(self):
         pass
 
+
+
     # [Motion State]
     # * Query users' motion state from CLOUD SERVICE
     # - Send: motion(rawdata)
@@ -20,12 +24,16 @@ class DataHandler(object):
     def getUserMotionState(self):
         pass
 
+
+
     # [POI Type & Description]
     # * Query users' poi type and description from CLOUD SERVICE
     # - Send: poi(GPS or iBeacon)
     # - Receive: poi(type)
     def getUserPOI(self):
         pass
+
+
 
     # [Sound Scence]
     # * Query users' sound scence from CLOUD SERVICE
@@ -35,6 +43,7 @@ class DataHandler(object):
         pass
 
 
+
     # --- STORAGE EVENT ---
 
     # [Visible Output]
@@ -42,6 +51,8 @@ class DataHandler(object):
     # - Send: motion(state), poi(type), sound(scence)
     def setCurUserVisibleOutput(self):
         pass
+
+
 
     # [Senz]
     # * Store the senz (computed by analyser) into DATABASE

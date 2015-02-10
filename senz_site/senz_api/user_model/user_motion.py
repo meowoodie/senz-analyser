@@ -1,5 +1,6 @@
 # from senz_api.lean_cloud.lean_obj import AVObject
 from lean_cloud.lean_obj import AVObject
+from cloud_services.service_api import ServiceAPI
 import json
 import requests
 
@@ -29,16 +30,20 @@ class UserMotion(AVObject):
         # Get the set of latest motion data according to user id from LeanCloud.
         # - The motion data is a list.
         # - eg. motion_data = [{...},{...}]
-        self.motionData = self._getLatestMotionDataByUserId(self.userId)
+        self.motionData = self._getLatestMotionDataByUserId(
+            self.userId, # The corresponding user's id
+            100          # The count of motion rawdata we need
+        )
 
-        # self.motionData = {'timestamp':5857542057676,'values':[7.8529816,7.1790137,4.2999864],'sensorName':'acc','accuracy':0}
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(self.motionData)
 
         # Store the result(state of motion data) into LeanCloud.
         self._saveStateIntoDatabase(self.state)
 
-    def _getLatestMotionDataByUserId(self, user_id):
+
+
+    def _getLatestMotionDataByUserId(self, user_id, count=100):
         # Init the param
         param = {
             "userIdString": user_id, # Select items which userId is equal to user_id.
@@ -47,26 +52,23 @@ class UserMotion(AVObject):
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
-            limit=100,         # Select the latest 100 item of result.
+            limit=count,       # Select the latest 100 item of result.
             include="rawData"
         )
         # return the motion data list
         # - If there is no results, it will return an empty list.(eg. [])
         return json.loads(response.content)["results"]
 
+
+
     def _queryMotionStateByMotionData(self, motion_data):
-        # Init the param
-        param = {
-            "clfType": ["SS"],
-            "rawData": motion_data
-        }
-        # Query the motion state
-        response = requests.post(
-            self.URL_MOTION_SERVICE,
-            params=param,
-            verify=False
+        # Invoke the cloud service interface.
+        return ServiceAPI.getMotionStateFromCloudService(
+            ["SS"],     # It's the training strategy
+            motion_data # The training sample motion data
         )
-        print response.content
+
+
 
     def _saveStateIntoDatabase(self, state):
         pass
