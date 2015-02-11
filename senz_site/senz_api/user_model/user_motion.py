@@ -2,9 +2,9 @@
 from lean_cloud.lean_obj import AVObject
 from cloud_services.service_api import ServiceAPI
 import json
-import requests
+# import requests
 
-class UserMotion(AVObject):
+class UserMotion(AVObject, ServiceAPI):
 
     DEFAULT_STATE       = "SITTING"
     DEFAULT_MOTION_DATA = {}
@@ -35,16 +35,18 @@ class UserMotion(AVObject):
             100          # The count of motion rawdata we need
         )
 
-        # Extract the raw data from motion data
-        raw_data_list = []
+        # Extract the raw data & object id from motion data
+        raw_data_list  = []
+        object_id_list = []
         for motion_data in self.motionData:
             raw_data_list.append(motion_data["rawData"])
+            object_id_list.append(motion_data["objectId"])
 
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(raw_data_list)
 
         # Store the result(state of motion data) into LeanCloud.
-        # self._saveStateIntoDatabase(self.state)
+        self._updateStateInDatabase(object_id_list, self.state)
 
 
 
@@ -68,15 +70,24 @@ class UserMotion(AVObject):
 
     def _queryMotionStateByMotionData(self, raw_data_list):
         # Invoke the cloud service interface.
-        return ServiceAPI.getMotionStateFromCloudService(
+        return self.getMotionStateFromCloudService(
             raw_data_list, # The training sample motion data
             ["SS", "VH"]   # It's the training strategy
         )
 
 
 
-    def _saveStateIntoDatabase(self, state):
-        pass
+    def _updateStateInDatabase(self, object_id_list, state = "UNKNOWN"):
+        # Create the dict of update data
+        update_data_list = []
+        for ob in object_id_list:
+            tmp_dict = {
+                "objectId": ob,
+                "state": state
+            }
+            update_data_list.append(tmp_dict)
+        # Update the data in LeanCloud
+        self.update_all(update_data_list)
 
 
 

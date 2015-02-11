@@ -2,7 +2,7 @@ import json
 import settings
 import requests
 
-class ServiceAPI:
+class ServiceAPI(object):
 
     debug_api            = "http://httpbin.org/post"
     get_motion_state_api = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_motion_state_url
