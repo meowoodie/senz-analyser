@@ -1,23 +1,25 @@
-# from senz_api.lean_cloud.lean_obj import AVObject
 from lean_cloud.lean_obj import AVObject
 from cloud_services.service_api import ServiceAPI
 import json
-# import requests
 
 class UserMotion(AVObject, ServiceAPI):
+    '''
+    USER MOTION
 
-    DEFAULT_STATE       = "SITTING"
+    Update the specified user's state in LeanCloud.
+    - Get the user's latest motion raw date from LeanCloud
+    - Query the user's latest motion state by the raw date
+    - Store the state in LeanCloud.
+
+    - Param: user id
+    '''
+
+    DEFAULT_STATE       = "UNKNOWN"
     DEFAULT_MOTION_DATA = {}
 
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from LeanCloud
     def __init__(self, user_id=None):
-        '''
-        THE INIT OF USER MOTION
-
-        :param user_id:
-        :return:
-        '''
         super(UserMotion, self).__init__()
         self.motionData = self.DEFAULT_MOTION_DATA
         self.state      = self.DEFAULT_STATE
@@ -46,7 +48,10 @@ class UserMotion(AVObject, ServiceAPI):
         self.state = self._queryMotionStateByMotionData(raw_data_list)
 
         # Store the result(state of motion data) into LeanCloud.
-        self._updateStateInDatabase(object_id_list, self.state)
+        self._updateStateInDatabase(
+            object_id_list, # The list of object id which need to be updated
+            self.state      # The update value of state
+        )
 
 
 
