@@ -35,11 +35,16 @@ class UserMotion(AVObject):
             100          # The count of motion rawdata we need
         )
 
+        # Extract the raw data from motion data
+        raw_data_list = []
+        for motion_data in self.motionData:
+            raw_data_list.append(motion_data["rawData"])
+
         # Get the state of set of latest motion data.
-        self.state = self._queryMotionStateByMotionData(self.motionData)
+        self.state = self._queryMotionStateByMotionData(raw_data_list)
 
         # Store the result(state of motion data) into LeanCloud.
-        self._saveStateIntoDatabase(self.state)
+        # self._saveStateIntoDatabase(self.state)
 
 
 
@@ -53,7 +58,7 @@ class UserMotion(AVObject):
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
             limit=count,       # Select the latest 100 item of result.
-            include="rawData"
+            keys="rawData, timestamp, objectId"
         )
         # return the motion data list
         # - If there is no results, it will return an empty list.(eg. [])
@@ -61,11 +66,11 @@ class UserMotion(AVObject):
 
 
 
-    def _queryMotionStateByMotionData(self, motion_data):
+    def _queryMotionStateByMotionData(self, raw_data_list):
         # Invoke the cloud service interface.
         return ServiceAPI.getMotionStateFromCloudService(
-            ["SS"],     # It's the training strategy
-            motion_data # The training sample motion data
+            raw_data_list, # The training sample motion data
+            ["SS", "VH"]   # It's the training strategy
         )
 
 

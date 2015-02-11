@@ -4,6 +4,7 @@ import requests
 
 class ServiceAPI:
 
+    debug_api            = "http://httpbin.org/post"
     get_motion_state_api = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_motion_state_url
     get_sound_scence_api = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_sound_scence_url
     get_poi_info_api     = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_poi_info_url
@@ -36,6 +37,7 @@ class ServiceAPI:
             "clfType": strategy, # The learning strategies, "SS" is recommended
             "rawData": raw_data  # The motion sample data
         }
+
         # The difference is String's quotation is " not ' after json.dumps
         # - print "json", json.dumps(param)
         # - print "native", param
@@ -44,9 +46,11 @@ class ServiceAPI:
         # Then decode the result to json.
         result = json.loads(requests.post(
             ServiceAPI.get_motion_state_api,
+            # ServiceAPI.debug_api,
             data=json.dumps(param),
             headers=cls._headers()
         ).content)
+
         # Decode the json to state
         ss_state_code = None
         vh_state_code = None
@@ -58,6 +62,7 @@ class ServiceAPI:
                 ss_state_code = result["predSS"][0]
             elif s is "VH":
                 vh_state_code = result["predVH"][0]
+
         # The ss is prior.
         if ss_state_code is not None:
             return ServiceAPI.state_code_set[int(ss_state_code)]
