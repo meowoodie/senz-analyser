@@ -65,7 +65,7 @@ class UserMotion(AVObject, ServiceAPI):
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
             limit=count,       # Select the latest 100 item of result.
-            keys="rawData, timestamp, objectId"
+            keys="rawData,timestamp,objectId"
         )
         # return the motion data list
         # - If there is no results, it will return an empty list.(eg. [])

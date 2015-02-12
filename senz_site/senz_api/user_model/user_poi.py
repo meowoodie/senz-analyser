@@ -9,11 +9,11 @@ class UserPOI(AVObject, ServiceAPI):
             "latitude": 39.9096046,
             "longitude": 116.3972282
         },
-        "locBeacon": ""
+        "locBeacon": "None"
     }
     DEFAULT_POI_INFO = {
-        "poiType": "",
-        "locDescription": ""
+        "poiType": "Other",
+        "locDescription": "None"
     }
 
 
@@ -27,10 +27,34 @@ class UserPOI(AVObject, ServiceAPI):
         if self.userId is None:
             return
 
+        # Get the set of latest poi data according to user id from LeanCloud.
+        # - The poi data is a list.
+        # - eg. poi_data = [{...},{...}]
         self._getLatestPOIDataByUserId(
             self.userId,
             count=3
         )
+
+        # Extract the poi data & object id from motion data
+        poi_info_list  = []
+        object_id_list = []
+        for poi_data in self.motionData:
+            # poi info
+            poi_info = {
+                "locGPS":    {
+                    "latitude": poi_data["locGPS"]["latitude"],
+                    "longitude": poi_data["locGPS"]["longitude"]
+                },
+                "locBeacon": poi_data["locBeacon"]
+            }
+            poi_info_list.append(poi_info)
+            # object id
+            object_id_list.append(poi_data["objectId"])
+
+        # Get the poi type & description set of latest poi data.
+        self._queryPOIInfoByPOIData(poi_info_list)
+
+
 
 
     def _getLatestPOIDataByUserId(self, user_id, count=3):
@@ -38,14 +62,14 @@ class UserPOI(AVObject, ServiceAPI):
         param = {
             "userIdString": user_id, # Select items which userId is equal to user_id.
         }
-        # Get the latest motion rawdata from LeanCloud
+        # Get the latest poi data(GPS & Beacon) from LeanCloud
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
             limit=count,       # Select the latest 100 item of result.
-            keys="locGPS, locBeacon, timestamp, objectId"
+            keys="locBeacon,locGPS,timestamp,objectId"
         )
-        # return the motion data list
+        # return the poi data list
         # - If there is no results, it will return an empty list.(eg. [])
         return json.loads(response.content)["results"]
 

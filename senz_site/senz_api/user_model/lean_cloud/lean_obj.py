@@ -55,6 +55,7 @@ class AVObject(object):
     def _get_avos(cls, cls_name, ob_id=None, **kwargs):
         get_url = AVObject.base_classes+cls_name
         get_url = get_url + '/' + ob_id if ob_id else get_url
+        # get_url = "http://httpbin.org/get"
 
         with_params = {}
         # Extract the condition from kwargs
