@@ -62,6 +62,7 @@ class AVObject(object):
         for kparam, vparam in kwargs.items():
             # Transfer vparam from json to string
             # And store the string as value, kparam as key into dict named with_params
+            # with_params[kparam] = json.dumps(vparam)
             if type(vparam) in [str, unicode]:
                 with_params[kparam] = vparam
             else:

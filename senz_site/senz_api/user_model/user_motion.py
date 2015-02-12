@@ -14,7 +14,7 @@ class UserMotion(AVObject, ServiceAPI):
     - Param: user id
     '''
 
-    DEFAULT_STATE       = "UNKNOWN"
+    DEFAULT_STATE       = "Unknown"
     DEFAULT_MOTION_DATA = {}
 
     # - If user id is not none,
@@ -26,7 +26,7 @@ class UserMotion(AVObject, ServiceAPI):
         self.userId     = user_id
 
         # If the user id is none, then over.
-        if user_id is None:
+        if self.userId is None:
             return
 
         # Get the set of latest motion data according to user id from LeanCloud.

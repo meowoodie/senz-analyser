@@ -21,3 +21,6 @@ get_poi_info_url     = ""
 # - 3 -> walking
 # - 4 -> running
 state_code_set = ["SITTING", "DRIVING", "RIDING", "WALKING", "RUNNING"]
+
+# Debug url
+debug_url      = "http://httpbin.org/post"
