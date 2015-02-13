@@ -36,23 +36,25 @@ class UserPOI(AVObject, ServiceAPI):
         )
 
         # Extract the poi data & object id from motion data
-        poi_info_list  = []
+        poi_data_list  = []
         object_id_list = []
-        for poi_data in self.motionData:
+        for poi_data in self.poiData:
             # poi info
-            poi_info = {
+            poi_data_post = {
                 "locGPS":    {
                     "latitude": poi_data["locGPS"]["latitude"],
                     "longitude": poi_data["locGPS"]["longitude"]
                 },
                 "locBeacon": poi_data["locBeacon"]
             }
-            poi_info_list.append(poi_info)
+            poi_data_list.append(poi_data_post)
             # object id
             object_id_list.append(poi_data["objectId"])
 
         # Get the poi type & description set of latest poi data.
-        self._queryPOIInfoByPOIData(poi_info_list)
+        self.poiInfo = self._queryPOIInfoByPOIData(poi_data_list)
+
+
 
 
 
@@ -75,7 +77,12 @@ class UserPOI(AVObject, ServiceAPI):
 
 
 
-    def _queryPOIInfoByPOIData(self):
+    def _queryPOIInfoByPOIData(self, poi_info_list):
+        return self.getPOIInfoFromCloudService(poi_info_list)
+
+
+
+    def _updatePOIInfoInDatabase(self):
         pass
 
 if __name__ == "__main__":

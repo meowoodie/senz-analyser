@@ -71,6 +71,16 @@ class ServiceAPI(object):
             return None
 
 
+
+    @classmethod
+    def getPOIInfoFromCloudService(cls, poi_data):
+        return None
+
+
+
+
+
+
 if __name__ == "__main__":
 
     rawdata = [
