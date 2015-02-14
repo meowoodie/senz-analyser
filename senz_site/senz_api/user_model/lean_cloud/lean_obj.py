@@ -35,6 +35,7 @@ class AVObject(object):
 
     @classmethod
     def _save_to_avos(cls, cls_name, data):
+        # get_url = "http://httpbin.org/post"
         if type(data) == list:
             # save many object
             patch_ob_list = [{"method": "POST",
@@ -46,6 +47,7 @@ class AVObject(object):
         else:
             # save single object
             return requests.post(
+                # get_url,
                 AVObject.base_classes+cls_name,
                 data=json.dumps(data),
                 headers=cls.headers(),
@@ -272,10 +274,9 @@ class AVObject(object):
     @classmethod
     def Date(cls):
         now = datetime.datetime.now().isoformat()
-        print now
         _date = {
             "__type": "Date",
-            "iso":    "2015-02-14T21:12:50.624Z"
+            "iso":    now[0:-3]+"Z"
         }
         return _date
 
