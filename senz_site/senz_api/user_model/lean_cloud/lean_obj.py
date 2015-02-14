@@ -272,11 +272,13 @@ class AVObject(object):
     # The following method used to generate the data,
     # which type is defined in LeanCloud.
     @classmethod
-    def Date(cls):
-        now = datetime.datetime.now().isoformat()
+    def Date(cls, delta_day=0):
+        delta_time = datetime.timedelta(hours=24*delta_day)
+        now = datetime.datetime.now()
+        dest_time = (now - delta_time).isoformat()
         _date = {
             "__type": "Date",
-            "iso":    now[0:-3]+"Z"
+            "iso":    dest_time[0:-3]+"Z"
         }
         return _date
 

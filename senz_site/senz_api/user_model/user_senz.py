@@ -1,4 +1,5 @@
 from lean_cloud.lean_obj import AVObject
+import json
 
 class UserSenz(AVObject):
 
@@ -26,25 +27,42 @@ class UserSenz(AVObject):
                 self.outputTupleCurrent[key] = output_tuple[key]
 
         self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
-        # self.Date()
-        self._getLatestOutputListByUserId(self.during["A_DAY"])
+
+        result = self._getLatestOutputListByUserId(self.during["A_DAY"])
+
+        for i in result:
+            print i
 
 
 
 
     def _addNewOutputTupleInDatabase(self, output_tuple):
+        # Init the param
         param = {
             "userId":        self.Pointer(self.userId),
             "userIdString":  self.userId,
-            "timestamp":     self.Date(),
+            "timestamp":     self.Date(), # The current time (formate: iso 8601)
             "visibleOutput": output_tuple
         }
-        print self.save(param).content
+        self.save(param)
 
 
 
     def _getLatestOutputListByUserId(self, during):
-        pass
+        # Init the param
+        param = {
+            "userIdString": self.userId, # Select items which userId is equal to user_id.
+            "timestamp":{"$gte":self.Date(1)}
+        }
+        # Get the latest poi data(GPS & Beacon) from Database
+        response = self.get(
+            order="timestamp", # Timestamp in Ascended order.
+            where=param,       # user id is Equal to userIdString in Database.
+            keys="visibleOutput,timestamp,objectId"
+        )
+        # return the poi data list
+        # - If there is no results, it will return an empty list.(eg. [])
+        return json.loads(response.content)["results"]
 
 if __name__ == "__main__":
 
