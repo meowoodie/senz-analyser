@@ -6,10 +6,10 @@ class UserMotion(AVObject, ServiceAPI):
     '''
     USER MOTION
 
-    Update the specified user's state in LeanCloud.
-    - Get the user's latest motion raw date from LeanCloud
+    Update the specified user's state in Database.
+    - Get the user's latest motion raw date from Database
     - Query the user's latest motion state by the raw date
-    - Store the state in LeanCloud.
+    - Store the state in Database.
 
     - Param: user id
     '''
@@ -19,7 +19,7 @@ class UserMotion(AVObject, ServiceAPI):
     DEFAULT_MOTION_COUNT = 100
 
     # - If user id is not none,
-    # - the instantiation of UserMotion will get the rawdata from LeanCloud
+    # - the instantiation of UserMotion will get the rawdata from Database
     def __init__(self, user_id=None, motion_count=DEFAULT_MOTION_COUNT):
         super(UserMotion, self).__init__()
         self.motionData = self.DEFAULT_MOTION_DATA
@@ -30,7 +30,7 @@ class UserMotion(AVObject, ServiceAPI):
         if self.userId is None:
             return
 
-        # Get the set of latest motion data according to user id from LeanCloud.
+        # Get the set of latest motion data according to user id from Database.
         # - The motion data is a list.
         # - eg. motion_data = [{...},{...}]
         self.motionData = self._getLatestMotionDataByUserId(
@@ -48,7 +48,7 @@ class UserMotion(AVObject, ServiceAPI):
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(raw_data_list)
 
-        # Store the result(state of motion data) into LeanCloud.
+        # Store the result(state of motion data) into Database.
         self._updateStateInDatabase(
             object_id_list, # The list of object id which need to be updated
             self.state      # The update value of state
@@ -61,10 +61,10 @@ class UserMotion(AVObject, ServiceAPI):
         param = {
             "userIdString": user_id, # Select items which userId is equal to user_id.
         }
-        # Get the latest motion rawdata from LeanCloud
+        # Get the latest motion rawdata from Database
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
-            where=param,       # user id is Equal to userIdString in LeanCloud.
+            where=param,       # user id is Equal to userIdString in Database.
             limit=count,       # Select the latest 100 item of result.
             keys="rawData,timestamp,objectId"
         )
@@ -92,7 +92,7 @@ class UserMotion(AVObject, ServiceAPI):
                 "state": state
             }
             update_data_list.append(tmp_dict)
-        # Update the data in LeanCloud
+        # Update the data in Database
         self.update_all(update_data_list)
 
 

@@ -19,7 +19,7 @@ class UserSenz(AVObject):
     def __init__(self, user_id=None, during=DEFAULT_SENZ_DURING, **output_tuple):
         super(UserSenz, self).__init__()
         self.userId = user_id
-        self.outputListDuring   = []
+        self.outputListDuring   = [] # The latest output list during * from Database
         self.outputTupleCurrent = {}
         # Init Current output tuple
         for key in self.output_key:
