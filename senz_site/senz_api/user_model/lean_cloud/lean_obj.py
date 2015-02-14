@@ -1,6 +1,7 @@
 import requests
 import json
 import settings
+import datetime
 
 class AVObject(object):
     base = r'https://leancloud.cn' #cn.avoscloud.com
@@ -264,3 +265,25 @@ class AVObject(object):
         :return: return list of response object containing status `[{"success":{}}]`
         """
         return cls._remove_avos(cls.__name__, ob_list)
+
+    # --- By Woodie ---
+    # The following method used to generate the data,
+    # which type is defined in LeanCloud.
+    @classmethod
+    def Date(cls):
+        now = datetime.datetime.now().isoformat()
+        print now
+        _date = {
+            "__type": "Date",
+            "iso":    "2015-02-14T21:12:50.624Z"
+        }
+        return _date
+
+    @classmethod
+    def Pointer(cls, obId):
+        _pointer = {
+            "__type":    "Pointer",
+            "className": "UserInfo",
+            "objectId":  obId
+        }
+        return _pointer
