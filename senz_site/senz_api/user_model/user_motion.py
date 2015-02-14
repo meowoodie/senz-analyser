@@ -14,12 +14,13 @@ class UserMotion(AVObject, ServiceAPI):
     - Param: user id
     '''
 
-    DEFAULT_STATE       = "Unknown"
-    DEFAULT_MOTION_DATA = {}
+    DEFAULT_STATE        = "Unknown"
+    DEFAULT_MOTION_DATA  = {}
+    DEFAULT_MOTION_COUNT = 100
 
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from LeanCloud
-    def __init__(self, user_id=None):
+    def __init__(self, user_id=None, motion_count=DEFAULT_MOTION_COUNT):
         super(UserMotion, self).__init__()
         self.motionData = self.DEFAULT_MOTION_DATA
         self.state      = self.DEFAULT_STATE
@@ -34,7 +35,7 @@ class UserMotion(AVObject, ServiceAPI):
         # - eg. motion_data = [{...},{...}]
         self.motionData = self._getLatestMotionDataByUserId(
             self.userId, # The corresponding user's id
-            100          # The count of motion rawdata we need
+            motion_count # The count of motion rawdata we need
         )
 
         # Extract the raw data & object id from motion data
@@ -55,7 +56,7 @@ class UserMotion(AVObject, ServiceAPI):
 
 
 
-    def _getLatestMotionDataByUserId(self, user_id, count=100):
+    def _getLatestMotionDataByUserId(self, user_id, count=DEFAULT_MOTION_COUNT):
         # Init the param
         param = {
             "userIdString": user_id, # Select items which userId is equal to user_id.

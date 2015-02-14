@@ -15,13 +15,14 @@ class UserPOI(AVObject, ServiceAPI):
         "poiType": "Other",
         "locDescription": "None"
     }
+    DEFAULT_POI_COUNT = 2
 
 
-    def __init__(self, user_id=None):
+    def __init__(self, user_id=None, poi_count=DEFAULT_POI_COUNT):
         super(UserPOI, self).__init__()
-        self.poiData = self.DEFAULT_POI_DATA
-        self.poiInfo = self.DEFAULT_POI_INFO
-        self.userId         = user_id
+        self.poiData     = self.DEFAULT_POI_DATA
+        self.poiInfoList = [self.DEFAULT_POI_INFO]
+        self.userId      = user_id
 
         # If the user id is none, then over.
         if self.userId is None:
@@ -30,9 +31,9 @@ class UserPOI(AVObject, ServiceAPI):
         # Get the set of latest poi data according to user id from LeanCloud.
         # - The poi data is a list.
         # - eg. poi_data = [{...},{...}]
-        self._getLatestPOIDataByUserId(
+        self.poiData = self._getLatestPOIDataByUserId(
             self.userId,
-            count=3
+            poi_count
         )
 
         # Extract the poi data & object id from motion data
@@ -52,14 +53,17 @@ class UserPOI(AVObject, ServiceAPI):
             object_id_list.append(poi_data["objectId"])
 
         # Get the poi type & description set of latest poi data.
-        self.poiInfo = self._queryPOIInfoByPOIData(poi_data_list)
+        self.poiInfoList = self._queryPOIInfoByPOIData(poi_data_list)
+
+        # Store the result into LeanCloud.
+        self._updatePOIInfoInDatabase(
+            object_id_list,  # The list of object id which need to be updated
+            self.poiInfoList # The update value of poi info
+        )
 
 
 
-
-
-
-    def _getLatestPOIDataByUserId(self, user_id, count=3):
+    def _getLatestPOIDataByUserId(self, user_id, poi_count=DEFAULT_POI_COUNT):
         # Init the param
         param = {
             "userIdString": user_id, # Select items which userId is equal to user_id.
@@ -68,7 +72,7 @@ class UserPOI(AVObject, ServiceAPI):
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in LeanCloud.
-            limit=count,       # Select the latest 100 item of result.
+            limit=poi_count,   # Select the latest 100 item of result.
             keys="locBeacon,locGPS,timestamp,objectId"
         )
         # return the poi data list
@@ -82,8 +86,20 @@ class UserPOI(AVObject, ServiceAPI):
 
 
 
-    def _updatePOIInfoInDatabase(self):
-        pass
+    def _updatePOIInfoInDatabase(self, object_id_list, poi_info_list):
+        # Create the dict of update data
+        update_data_list = []
+        i = 0
+        for ob in object_id_list:
+            tmp_dict = {
+                "objectId":       ob,
+                "poiType":        poi_info_list[i]["poiType"],
+                "locDescription": poi_info_list[i]["locDescription"]
+            }
+            update_data_list.append(tmp_dict)
+            i += 1
+        # Update the data in LeanCloud
+        self.update_all(update_data_list)
 
 if __name__ == "__main__":
 
