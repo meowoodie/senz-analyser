@@ -34,7 +34,6 @@ class UserMotion(AVObject, ServiceAPI):
         # - The motion data is a list.
         # - eg. motion_data = [{...},{...}]
         self.motionData = self._getLatestMotionDataByUserId(
-            self.userId, # The corresponding user's id
             motion_count # The count of motion rawdata we need
         )
 
@@ -56,10 +55,10 @@ class UserMotion(AVObject, ServiceAPI):
 
 
 
-    def _getLatestMotionDataByUserId(self, user_id, count=DEFAULT_MOTION_COUNT):
+    def _getLatestMotionDataByUserId(self, count=DEFAULT_MOTION_COUNT):
         # Init the param
         param = {
-            "userIdString": user_id, # Select items which userId is equal to user_id.
+            "userIdString": self.userId, # Select items which userId is equal to user_id.
         }
         # Get the latest motion rawdata from Database
         response = self.get(

@@ -32,7 +32,6 @@ class UserPOI(AVObject, ServiceAPI):
         # - The poi data is a list.
         # - eg. poi_data = [{...},{...}]
         self.poiData = self._getLatestPOIDataByUserId(
-            self.userId,
             poi_count
         )
 
@@ -63,10 +62,10 @@ class UserPOI(AVObject, ServiceAPI):
 
 
 
-    def _getLatestPOIDataByUserId(self, user_id, poi_count=DEFAULT_POI_COUNT):
+    def _getLatestPOIDataByUserId(self, poi_count=DEFAULT_POI_COUNT):
         # Init the param
         param = {
-            "userIdString": user_id, # Select items which userId is equal to user_id.
+            "userIdString": self.userId, # Select items which userId is equal to user_id.
         }
         # Get the latest poi data(GPS & Beacon) from Database
         response = self.get(
