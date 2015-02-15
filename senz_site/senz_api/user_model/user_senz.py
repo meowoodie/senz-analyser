@@ -26,13 +26,12 @@ class UserSenz(AVObject):
             if output_tuple.has_key(key):
                 self.outputTupleCurrent[key] = output_tuple[key]
 
-        # self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
+        # Add a new visible output tuple into database.
+        self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
+        # Get the latest visible output list during this (year/month/week/day).
         result = self._getLatestOutputListByUserId(self.during["THIS_YEAR"])
 
-        for i in result:
-            print i
-        print len(result)
 
 
 
@@ -66,6 +65,13 @@ class UserSenz(AVObject):
         # return the poi data list
         # - If there is no results, it will return an empty list.(eg. [])
         return json.loads(response.content)["results"]
+
+
+
+    def _getPredictUserSenz(self):
+        pass
+
+
 
 if __name__ == "__main__":
 
