@@ -268,17 +268,33 @@ class AVObject(object):
         """
         return cls._remove_avos(cls.__name__, ob_list)
 
+
+
     # --- By Woodie ---
     # The following method used to generate the data,
     # which type is defined in LeanCloud.
     @classmethod
-    def Date(cls, delta_day=0):
-        delta_time = datetime.timedelta(hours=24*delta_day)
+    def Date(cls, on_this=None):
+        # Get the current time.
         now = datetime.datetime.now()
-        dest_time = (now - delta_time).isoformat()
+        # setting time is current time.
+        if on_this is None:
+            setting_datetime = now
+        # setting time is the beginning of this (day/week/month/year).
+        elif on_this is 0: # Day
+            setting_datetime = now.replace(hour=0, minute=0, second=0, microsecond=1)
+        elif on_this is 1: # Week
+            delta = datetime.timedelta(now.weekday())
+            setting_datetime = now - delta
+            setting_datetime = setting_datetime.replace(hour=0, minute=0, second=0, microsecond=1)
+        elif on_this is 2: # Month
+            setting_datetime = now.replace(day=1, hour=0, minute=0, second=0, microsecond=1)
+        elif on_this is 3: # Year
+            setting_datetime = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=1)
+        # Generate LeanCloud's date
         _date = {
             "__type": "Date",
-            "iso":    dest_time[0:-3]+"Z"
+            "iso":    (setting_datetime.isoformat())[0:-3]+"Z"
         }
         return _date
 

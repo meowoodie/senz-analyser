@@ -4,10 +4,10 @@ import json
 class UserSenz(AVObject):
 
     during = {
-        "A_DAY":   0,
-        "A_WEEK":  1,
-        "A_MONTH": 2,
-        "A_YEAR":  3
+        "THIS_DAY":   0,
+        "THIS_WEEK":  1,
+        "THIS_MONTH": 2,
+        "THIS_YEAR":  3
     }
     output_key = (
         "motion",
@@ -26,12 +26,13 @@ class UserSenz(AVObject):
             if output_tuple.has_key(key):
                 self.outputTupleCurrent[key] = output_tuple[key]
 
-        self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
+        # self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
-        result = self._getLatestOutputListByUserId(self.during["A_DAY"])
+        result = self._getLatestOutputListByUserId(self.during["THIS_YEAR"])
 
         for i in result:
             print i
+        print len(result)
 
 
 
@@ -52,7 +53,9 @@ class UserSenz(AVObject):
         # Init the param
         param = {
             "userIdString": self.userId, # Select items which userId is equal to user_id.
-            "timestamp":{"$gte":self.Date(1)}
+            "timestamp": {
+                "$gte": self.Date(during)
+            }
         }
         # Get the latest poi data(GPS & Beacon) from Database
         response = self.get(
