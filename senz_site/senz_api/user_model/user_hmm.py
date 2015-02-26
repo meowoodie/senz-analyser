@@ -9,6 +9,8 @@ class UserHMM(AVObject, SenzModel):
         self.userId = user_id
 
         model = self._getUserHMMParamsByUserId()
+        for i in model:
+            print i
 
 
     def _getUserHMMParamsByUserId(self):

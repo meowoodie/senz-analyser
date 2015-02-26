@@ -51,18 +51,63 @@ class SenzModel:
         self.mDefaultEmissionMatrix = self.createDefaultEmissionMatrix()
 
 
+    # Public Method.
+
     def setPi(self, pi):
+        '''
+        SET PI
+
+        :param pi:
+            It's a dict, the key is state name, the value is the probability.
+            eg. pi = {"WORK": 0.6, "LIVE": 0.1, "RELAX": 0.05, "ENTERTAIN": 0.2, "EXERCISE": 0.05}
+        :return:
+        '''
         self.mDefaultPi = pi
 
     def setTransitionP(self, transition_p):
+        '''
+        SET TRANSITION P
+
+        :param transition_p:
+            It's a two-dimension dict, the first and second level key is state name, the value the probability.
+            eg. transition_p = {STATE1 : {STATE1 : p1, STATE2 : p2, ...}, ...}
+        :return:
+        '''
         self.mDefaultTransitionMatrix = transition_p
 
+    def setEmissionP(self, emission_p):
+        '''
+        SET EMISSION P
+
+        :param emission_p:
+            It's a dict, the key is state name, the value is an array of emission probability.
+            eg. emission_p = {STATE1: [p1, p2, p3, ...], ...}
+        :return:
+        '''
+        for state in self.mDefaultHiddenStateSet:
+            output_index = 0
+            for output in self.mDefaultVisibleOutputSet:
+                self.mDefaultEmissionMatrix[state][output] = emission_p[state][output_index]
+                output_index += 1
+
     def setMotionConditionP(self, motion_p):
+        '''
+        SET MOTION CONDITION P
+
+        :param motion_p:
+        :return:
+        '''
         self.mMotionConditionMatrix = motion_p
         # Re-compute emission matrix
         self.mDefaultEmissionMatrix = self.createDefaultEmissionMatrix()
 
     def setLocationConditionP(self, location_p):
+        '''
+        SET LOCATION CONDITION P
+
+        :param location_p:
+        :return:
+        '''
         self.mLocationConditionMatrix = location_p
         # Re-compute emission matrix
         self.mDefaultEmissionMatrix = self.createDefaultEmissionMatrix()
@@ -71,6 +116,8 @@ class SenzModel:
     #     self.mSoundConditionMatrix = sound_p
     #     # Re-compute emission matrix
     #     self.mDefaultEmissionMatrix = self.createDefaultEmissionMatrix()
+
+    # Private Method.
 
     # The construction of Condition Matrix
     # - Motion Condition Matrix
