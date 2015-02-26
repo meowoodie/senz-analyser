@@ -16,6 +16,10 @@ class Behavior:
         self.bEviName   = []
         for evi_name in self.bEvidences.keys():
             self.bEviName.append(evi_name)
+        # The lable of the behavior
+        self.bLable  = ""
+        for lable in self.bEviName:
+            self.bLable += lable + " "
 
     def getEvidenceName(self):
         return self.bEviName
@@ -26,5 +30,7 @@ class Behavior:
     def getEvidences(self):
         return self.bEvidences
 
+    def getBehaviorLable(self):
+        return self.bLable
 
 
