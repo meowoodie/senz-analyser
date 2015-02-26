@@ -26,11 +26,11 @@ class Senz(HMM):
         #                   model.mDefaultTransitionMatrix,
         #                   model.mDefaultEmissionMatrix)
         HMM.__init__(self,
-                         self.visible_output_obj,
-                         self.hidden_state,
-                         model.mDefaultPi,
-                         model.mDefaultTransitionMatrix,
-                         model.mDefaultEmissionMatrix)
+                     self.visible_output_obj,
+                     self.hidden_state,
+                     model.mDefaultPi,
+                     model.mDefaultTransitionMatrix,
+                     model.mDefaultEmissionMatrix)
 
     # Override base func
     def initTrainSample(self, output): # The Senz's visible output
