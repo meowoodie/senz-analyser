@@ -9,8 +9,10 @@ class UserHMM(SenzModel, AVObject):
         # SenzModel.__init__(self)
         self.userId = user_id
 
+        # Get hmm model's param from database by user id.
         model_info = self._getUserHMMParamsByUserId()
-        
+
+        # Set the model with these params.
         self._setTransitionMatrix(model_info)
         self._setEmissionMatrix(model_info)
         self._setPi(model_info)
@@ -22,12 +24,14 @@ class UserHMM(SenzModel, AVObject):
         param = {
             "userIdString": self.userId, # Select items which userId is equal to user_id.
         }
-        # Get the latest motion rawdata from Database
+        # Get the latest hmm model from Database
         response = self.get(
+            order="-timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in Database.
-            keys="pi,transitionMatrix,emissionMatrix,motionConditionMatrix,locationConditionMatrix,soundConditionMatrix"
+            keys="pi,transitionMatrix,emissionMatrix,motionConditionMatrix,locationConditionMatrix,soundConditionMatrix,timestamp",
+            limit=1            # Select the latest item of result.
         )
-        # return the motion data list
+        # return the latest hmm model
         # - If there is no results, it will return an empty list.(eg. [])
         return json.loads(response.content)["results"][0]
 

@@ -62,7 +62,7 @@ class UserMotion(AVObject, ServiceAPI):
         }
         # Get the latest motion rawdata from Database
         response = self.get(
-            order="timestamp", # Timestamp in Ascended order.
+            order="-timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in Database.
             limit=count,       # Select the latest 100 item of result.
             keys="rawData,timestamp,objectId"
