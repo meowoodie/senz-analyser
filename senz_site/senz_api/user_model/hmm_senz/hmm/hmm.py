@@ -403,6 +403,12 @@ class HMM:
         return self.hTransitionP
 
     def getEmission(self):
+        emission_p = {}
+        for state in self.hHiddenState:
+            output_index = 0
+            for output in self.hVisibleOutput:
+                emission_p[state][output_index] = self.hEmissionP[state][output]
+                output_index += 1
         return self.hEmissionP
 
     def getOutputSeq(self):
