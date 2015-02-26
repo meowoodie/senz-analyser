@@ -94,4 +94,8 @@ u.printEmissionMatrix()
 u.printHiddenState()
 u.printVisibleOutput()
 
+print s.hPi
+print s.hTransitionP
+print s.hEmissionP
+
 print "The outcome:", s.getQ()
