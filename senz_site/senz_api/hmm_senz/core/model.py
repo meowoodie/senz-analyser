@@ -1,6 +1,6 @@
 from __future__ import division
-from behavior import Behavior
-# import senz_api.user_model.hmm_senz.core.behavior as behavior
+import senz_api.hmm_senz.core.behavior as behavior
+# import hmm_senz.utility.utility as utility
 
 __author__ = 'woodie'
 
@@ -145,10 +145,10 @@ class SenzModel:
         for l in self.mDefaultLocation:
             for m in self.mDefaultMotion:
                 # for s in self.mDefaultSound
-                behav.append(Behavior(motion = m,
-                                      location = l
-                                      # no = i,
-                                      # sound = s
+                behav.append(behavior.Behavior(motion = m,
+                                               location = l
+                                               # no = i,
+                                               # sound = s
                 ))
                 i += 1
         return behav

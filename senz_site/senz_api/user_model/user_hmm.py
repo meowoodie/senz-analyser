@@ -8,6 +8,22 @@ class UserHMM(AVObject, SenzModel):
         super(UserHMM, self).__init__()
         self.userId = user_id
 
+        model = self._getUserHMMParamsByUserId()
+
+
+    def _getUserHMMParamsByUserId(self):
+        # Init the param
+        param = {
+            "userIdString": self.userId, # Select items which userId is equal to user_id.
+        }
+        # Get the latest motion rawdata from Database
+        response = self.get(
+            where=param,       # user id is Equal to userIdString in Database.
+            keys="pi,transitionMatrix,emissionMatrix,motionConditionMatrix,locationConditionMatrix,soundConditionMatrix"
+        )
+        # return the motion data list
+        # - If there is no results, it will return an empty list.(eg. [])
+        return json.loads(response.content)["results"]
 
 
 if __name__ == "__main__":
