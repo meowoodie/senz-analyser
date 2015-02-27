@@ -6,8 +6,8 @@ class UserHMM(SenzModel, AVObject):
 
     def __init__(self, user_id):
         # super(UserHMM, self).__init__()
-        SenzModel.__init__()
-        AVObject.__init__()
+        SenzModel.__init__(self)
+        AVObject.__init__(self)
 
         self.userId = user_id
 
@@ -31,7 +31,7 @@ class UserHMM(SenzModel, AVObject):
             order="-timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in Database.
             keys="pi,emissionMatrix,transitionMatrix,motionConditionMatrix,locationConditionMatrix,soundConditionMatrix,timestamp",
-            limit=5            # Select the latest item of result.
+            limit=1            # Select the latest item of result.
         )
         # return the latest hmm model
         # - If there is no results, it will return an empty list.(eg. [])

@@ -22,6 +22,12 @@ class UserSenz(Senz, AVObject):
         self.userId = user_id
         self.outputListDuring   = [] # The latest output list during * from Database
         self.outputTupleCurrent = {} # The Current output tuple (made by other model's computing result)
+
+        model = UserHMM(self.userId)
+        # super(UserSenz, self).__init__()
+        Senz.__init__(self,model)
+        AVObject.__init__(self)
+
         # Init Current output tuple
         for key in self.output_key:
             if output_tuple.has_key(key):
@@ -33,9 +39,7 @@ class UserSenz(Senz, AVObject):
         # Get the latest visible output list during this (year/month/week/day).
         result = self._getLatestOutputListByUserId(self.during["THIS_YEAR"])
 
-        model = UserHMM(self.userId)
-
-        # super(UserSenz, self).__init__()
+        print result
 
 
 
@@ -61,15 +65,19 @@ class UserSenz(Senz, AVObject):
                 "$gte": self.Date(during)
             }
         }
-        # Get the latest poi data(GPS & Beacon) from Database
+        # Get the latest visible output list from Database
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in Database.
             keys="visibleOutput,timestamp,objectId"
         )
-        # return the poi data list
+        result = json.loads(response.content)["results"]
+        visible_output_list = []
+        for item in result:
+            visible_output_list.append(item["visibleOutput"])
+        # return the visible output data list
         # - If there is no results, it will return an empty list.(eg. [])
-        return json.loads(response.content)["results"]
+        return visible_output_list
 
 
 
