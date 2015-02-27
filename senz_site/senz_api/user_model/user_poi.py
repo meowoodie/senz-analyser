@@ -19,7 +19,10 @@ class UserPOI(AVObject, ServiceAPI):
 
 
     def __init__(self, user_id=None, poi_count=DEFAULT_POI_COUNT):
-        super(UserPOI, self).__init__()
+        # super(UserPOI, self).__init__()
+        AVObject.__init__()
+        ServiceAPI.__init__()
+
         self.poiData     = self.DEFAULT_POI_DATA
         self.poiInfoList = [self.DEFAULT_POI_INFO]
         self.userId      = user_id

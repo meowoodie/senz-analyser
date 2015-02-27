@@ -1,7 +1,9 @@
 from lean_cloud.lean_obj import AVObject
+from user_hmm import UserHMM
+from hmm_senz.core.senz import Senz
 import json
 
-class UserSenz(AVObject):
+class UserSenz(Senz, AVObject):
 
     during = {
         "THIS_DAY":   0,
@@ -17,7 +19,6 @@ class UserSenz(AVObject):
     )
 
     def __init__(self, user_id, **output_tuple):
-        super(UserSenz, self).__init__()
         self.userId = user_id
         self.outputListDuring   = [] # The latest output list during * from Database
         self.outputTupleCurrent = {} # The Current output tuple (made by other model's computing result)
@@ -31,6 +32,10 @@ class UserSenz(AVObject):
 
         # Get the latest visible output list during this (year/month/week/day).
         result = self._getLatestOutputListByUserId(self.during["THIS_YEAR"])
+
+        model = UserHMM(self.userId)
+
+        # super(UserSenz, self).__init__()
 
 
 

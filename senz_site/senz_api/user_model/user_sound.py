@@ -8,7 +8,9 @@ class UserMotion(AVObject):
     # If user id is not none,
     # the instantiation of UserMotion will get the rawdata from LeanCloud
     def __init__(self, user_id=None):
-        super(UserMotion, self).__init__()
+        # super(UserMotion, self).__init__()
+        AVObject.__init__()
+
         self.rawData = self.DEFAULT_RAWDATA
         self.state   = self.DEFAULT_STATE
         self.userId  = user_id

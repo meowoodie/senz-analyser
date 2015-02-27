@@ -21,7 +21,10 @@ class UserMotion(AVObject, ServiceAPI):
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from Database
     def __init__(self, user_id=None, motion_count=DEFAULT_MOTION_COUNT):
-        super(UserMotion, self).__init__()
+        # super(UserMotion, self).__init__()
+        AVObject.__init__()
+        ServiceAPI.__init__()
+
         self.motionData = self.DEFAULT_MOTION_DATA
         self.state      = self.DEFAULT_STATE
         self.userId     = user_id
