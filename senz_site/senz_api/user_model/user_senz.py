@@ -25,7 +25,7 @@ class UserSenz(Senz, AVObject):
 
         model = UserHMM(self.userId)
         # super(UserSenz, self).__init__()
-        Senz.__init__(self,model)
+        Senz.__init__(self, model)
         AVObject.__init__(self)
 
         # Init Current output tuple
@@ -37,9 +37,12 @@ class UserSenz(Senz, AVObject):
         self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
         # Get the latest visible output list during this (year/month/week/day).
-        result = self._getLatestOutputListByUserId(self.during["THIS_YEAR"])
+        visible_ouput_list = self._getLatestOutputListByUserId(self.during["THIS_DAY"])
 
-        print result
+        self.initTrainSample(visible_ouput_list)
+
+        self.BaumWelchLearn(0.01)
+        self.ViterbiDecode()
 
 
 
@@ -88,7 +91,7 @@ class UserSenz(Senz, AVObject):
 
 if __name__ == "__main__":
 
-    m = UserSenz("54d82fefe4b0d414801050ee", motion="RUNNING", location="Tiananmen")
+    m = UserSenz("54d82fefe4b0d414801050ee", motion="RUNNING", location="COMMUNITY")
 
 
 
