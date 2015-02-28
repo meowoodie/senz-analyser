@@ -56,7 +56,12 @@ class UserSenz(Senz, AVObject):
             new_senz_list
         )
 
-
+        # Update UserHMM's param in Database.
+        model.addHMMParamInDatabase(
+            pi=self.getPi(),
+            emission=self.getEmission(),
+            transition=self.getTransition()
+        )
 
 
 
@@ -122,7 +127,7 @@ class UserSenz(Senz, AVObject):
             update_data_list.append(tmp_dict)
             i += 1
         # Update the data in Database
-        print self.update_all(update_data_list).content
+        self.update_all(update_data_list)
 
 
 
