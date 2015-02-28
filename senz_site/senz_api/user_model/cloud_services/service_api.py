@@ -76,12 +76,8 @@ class ServiceAPI(object):
     def getPOIInfoFromCloudService(cls, poi_data):
         result = [
             {
-                "poiType": "Travel",
-                "locDescription": "Beijing Tiananmen Square"
-            },
-            {
-                "poiType": "Travel",
-                "locDescription": "Beijing Tiananmen Square"
+                "poiType": "SHOPPING",
+                "locDescription": "Xidan Dayuecheng"
             }
         ]
         return result
