@@ -15,7 +15,7 @@ class UserPOI(AVObject, ServiceAPI):
         "poiType": "Other",
         "locDescription": "None"
     }
-    DEFAULT_POI_COUNT = 2
+    DEFAULT_POI_COUNT = 1
 
 
     def __init__(self, user_id=None):
@@ -70,7 +70,7 @@ class UserPOI(AVObject, ServiceAPI):
 
 
     # PUBLIC METHOD
-    def getLatestPOIType(self, poi_count=DEFAULT_POI_COUNT):
+    def getLatestPOIInfo(self, poi_count=DEFAULT_POI_COUNT):
         '''
 
         :param poi_count:
