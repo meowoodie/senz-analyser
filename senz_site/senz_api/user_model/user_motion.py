@@ -20,19 +20,14 @@ class UserMotion(AVObject, ServiceAPI):
 
     # - If user id is not none,
     # - the instantiation of UserMotion will get the rawdata from Database
-    def __init__(self, user_id=None, motion_count=DEFAULT_MOTION_COUNT):
+    def __init__(self, user_id=None):
         # super(UserMotion, self).__init__()
         AVObject.__init__(self)
         ServiceAPI.__init__(self)
 
         self.motionData  = self.DEFAULT_MOTION_DATA
         self.state       = self.DEFAULT_STATE
-        self.motionCount = motion_count
         self.userId      = user_id
-
-        # If the user id is none, then over.
-        if self.userId is None:
-            return
 
 
 
@@ -78,7 +73,7 @@ class UserMotion(AVObject, ServiceAPI):
 
 
     # PUBLIC METHOD
-    def getLatestMotionState(self):
+    def getLatestMotionState(self, motion_count=DEFAULT_MOTION_COUNT):
         '''
         GET LATEST MOTION STATE
 
@@ -88,7 +83,7 @@ class UserMotion(AVObject, ServiceAPI):
         # - The motion data is a list.
         # - eg. motion_data = [{...},{...}]
         self.motionData = self._getLatestMotionDataByUserId(
-            self.motionCount # The count of motion rawdata we need
+            motion_count # The count of motion rawdata we need
         )
         # Extract the raw data & object id from motion data
         raw_data_list  = []

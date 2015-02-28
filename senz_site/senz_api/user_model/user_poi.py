@@ -18,7 +18,7 @@ class UserPOI(AVObject, ServiceAPI):
     DEFAULT_POI_COUNT = 2
 
 
-    def __init__(self, user_id=None, poi_count=DEFAULT_POI_COUNT):
+    def __init__(self, user_id=None):
         # super(UserPOI, self).__init__()
         AVObject.__init__(self)
         ServiceAPI.__init__(self)
@@ -26,42 +26,6 @@ class UserPOI(AVObject, ServiceAPI):
         self.poiData     = self.DEFAULT_POI_DATA
         self.poiInfoList = [self.DEFAULT_POI_INFO]
         self.userId      = user_id
-
-        # If the user id is none, then over.
-        if self.userId is None:
-            return
-
-        # Get the set of latest poi data according to user id from Database.
-        # - The poi data is a list.
-        # - eg. poi_data = [{...},{...}]
-        self.poiData = self._getLatestPOIDataByUserId(
-            poi_count
-        )
-
-        # Extract the poi data & object id from motion data
-        poi_data_list  = []
-        object_id_list = []
-        for poi_data in self.poiData:
-            # poi info
-            poi_data_post = {
-                "locGPS":    {
-                    "latitude": poi_data["locGPS"]["latitude"],
-                    "longitude": poi_data["locGPS"]["longitude"]
-                },
-                "locBeacon": poi_data["locBeacon"]
-            }
-            poi_data_list.append(poi_data_post)
-            # object id
-            object_id_list.append(poi_data["objectId"])
-
-        # Get the poi type & description set of latest poi data.
-        self.poiInfoList = self._queryPOIInfoByPOIData(poi_data_list)
-
-        # Store the result into Database.
-        self._updatePOIInfoInDatabase(
-            object_id_list,  # The list of object id which need to be updated
-            self.poiInfoList # The update value of poi info
-        )
 
 
 
@@ -102,6 +66,45 @@ class UserPOI(AVObject, ServiceAPI):
             i += 1
         # Update the data in Database
         self.update_all(update_data_list)
+
+
+
+    # PUBLIC METHOD
+    def getLatestPOIType(self, poi_count=DEFAULT_POI_COUNT):
+        '''
+
+        :param poi_count:
+        :return:
+        '''
+        # Get the set of latest poi data according to user id from Database.
+        # - The poi data is a list.
+        # - eg. poi_data = [{...},{...}]
+        self.poiData = self._getLatestPOIDataByUserId(
+            poi_count
+        )
+        # Extract the poi data & object id from motion data
+        poi_data_list  = []
+        object_id_list = []
+        for poi_data in self.poiData:
+            # poi info
+            poi_data_post = {
+                "locGPS":    {
+                    "latitude": poi_data["locGPS"]["latitude"],
+                    "longitude": poi_data["locGPS"]["longitude"]
+                },
+                "locBeacon": poi_data["locBeacon"]
+            }
+            poi_data_list.append(poi_data_post)
+            # object id
+            object_id_list.append(poi_data["objectId"])
+        # Get the latest poi type&description set of poi data.
+        self.poiInfoList = self._queryPOIInfoByPOIData(poi_data_list)
+        # Store the result into Database.
+        self._updatePOIInfoInDatabase(
+            object_id_list,  # The list of object id which need to be updated
+            self.poiInfoList # The update value of poi info
+        )
+        return self.poiInfoList
 
 if __name__ == "__main__":
 
