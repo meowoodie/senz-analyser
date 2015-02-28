@@ -37,12 +37,24 @@ class UserSenz(Senz, AVObject):
         self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
         # Get the latest visible output list during this (year/month/week/day).
-        visible_ouput_list = self._getLatestOutputListByUserId(self.during["THIS_DAY"])
+        senz_info_list = self._getLatestSenzInfoListByUserId(self.during["THIS_DAY"])
 
-        self.initTrainSample(visible_ouput_list)
+        visible_output_list = []
+        object_id_list = []
+        old_senz_list = []
+        for item in senz_info_list:
+            visible_output_list.append(item["visibleOutput"])
+            object_id_list.append(item["objectId"])
+            old_senz_list.append(item["senz"])
 
-        self.BaumWelchLearn(0.01)
-        self.ViterbiDecode()
+        # Get the new list of Senz.
+        new_senz_list = self._getNewUserSenz(visible_output_list, old_senz_list)
+
+        # Update Senz in Database.
+        self._updateSenzInDatabase(
+            object_id_list,
+            new_senz_list
+        )
 
 
 
@@ -60,7 +72,7 @@ class UserSenz(Senz, AVObject):
 
 
 
-    def _getLatestOutputListByUserId(self, during):
+    def _getLatestSenzInfoListByUserId(self, during):
         # Init the param
         param = {
             "userIdString": self.userId, # Select items which userId is equal to user_id.
@@ -72,26 +84,51 @@ class UserSenz(Senz, AVObject):
         response = self.get(
             order="timestamp", # Timestamp in Ascended order.
             where=param,       # user id is Equal to userIdString in Database.
-            keys="visibleOutput,timestamp,objectId"
+            keys="senz,visibleOutput,timestamp,objectId"
         )
         result = json.loads(response.content)["results"]
-        visible_output_list = []
-        for item in result:
-            visible_output_list.append(item["visibleOutput"])
         # return the visible output data list
         # - If there is no results, it will return an empty list.(eg. [])
-        return visible_output_list
+        return result
 
 
 
-    def _getPredictUserSenz(self):
-        pass
+    def _getNewUserSenz(self, visible_output_list, old_senz_list):
+        # Init the training sample.
+        self.initTrainSample(visible_output_list)
+        # Train.
+        self.BaumWelchLearn(0.01)
+        self.ViterbiDecode()
+        # Get predict result.
+        doing_list = self.getQ()
+        # Generate the senz and return it.
+        i = 0
+        for senz in old_senz_list:
+            senz["doing"] = doing_list[i]
+            i += 1
+        return old_senz_list
+
+
+
+    def _updateSenzInDatabase(self, object_id_list, senz_list):
+        # Create the dict of update data
+        update_data_list = []
+        i = 0
+        for ob in object_id_list:
+            tmp_dict = {
+                "objectId": ob,
+                "senz": senz_list[i]
+            }
+            update_data_list.append(tmp_dict)
+            i += 1
+        # Update the data in Database
+        print self.update_all(update_data_list).content
 
 
 
 if __name__ == "__main__":
 
-    m = UserSenz("54d82fefe4b0d414801050ee", motion="RUNNING", location="COMMUNITY")
+    m = UserSenz("54d82fefe4b0d414801050ee", motion="SITTING", location="EDUCATION")
 
 
 
