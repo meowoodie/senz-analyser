@@ -25,36 +25,14 @@ class UserMotion(AVObject, ServiceAPI):
         AVObject.__init__(self)
         ServiceAPI.__init__(self)
 
-        self.motionData = self.DEFAULT_MOTION_DATA
-        self.state      = self.DEFAULT_STATE
-        self.userId     = user_id
+        self.motionData  = self.DEFAULT_MOTION_DATA
+        self.state       = self.DEFAULT_STATE
+        self.motionCount = motion_count
+        self.userId      = user_id
 
         # If the user id is none, then over.
         if self.userId is None:
             return
-
-        # Get the set of latest motion data according to user id from Database.
-        # - The motion data is a list.
-        # - eg. motion_data = [{...},{...}]
-        self.motionData = self._getLatestMotionDataByUserId(
-            motion_count # The count of motion rawdata we need
-        )
-
-        # Extract the raw data & object id from motion data
-        raw_data_list  = []
-        object_id_list = []
-        for motion_data in self.motionData:
-            raw_data_list.append(motion_data["rawData"])
-            object_id_list.append(motion_data["objectId"])
-
-        # Get the state of set of latest motion data.
-        self.state = self._queryMotionStateByMotionData(raw_data_list)
-
-        # Store the result(state of motion data) into Database.
-        self._updateStateInDatabase(
-            object_id_list, # The list of object id which need to be updated
-            self.state      # The update value of state
-        )
 
 
 
@@ -98,6 +76,42 @@ class UserMotion(AVObject, ServiceAPI):
         self.update_all(update_data_list)
 
 
+
+    # PUBLIC METHOD
+    def getLatestMotionState(self):
+        '''
+        GET LATEST MOTION STATE
+
+        :return:
+        '''
+        # Get the set of latest motion data according to user id from Database.
+        # - The motion data is a list.
+        # - eg. motion_data = [{...},{...}]
+        self.motionData = self._getLatestMotionDataByUserId(
+            self.motionCount # The count of motion rawdata we need
+        )
+        # Extract the raw data & object id from motion data
+        raw_data_list  = []
+        object_id_list = []
+        for motion_data in self.motionData:
+            raw_data_list.append(motion_data["rawData"])
+            object_id_list.append(motion_data["objectId"])
+        # Get the state of set of latest motion data.
+        self.state = self._queryMotionStateByMotionData(raw_data_list)
+        # Store the result(state of motion data) into Database.
+        self._updateStateInDatabase(
+            object_id_list, # The list of object id which need to be updated
+            self.state      # The update value of state
+        )
+        return self.state
+
+    def getLastMotionState(self):
+        '''
+        GET LAST MOTION STATE
+
+        :return:
+        '''
+        return self.state
 
 if __name__ == "__main__":
 

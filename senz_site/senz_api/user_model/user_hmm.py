@@ -78,6 +78,7 @@ class UserHMM(SenzModel, AVObject):
                               sound_condition=None
     ):
         '''
+        ADD HMM PARAM IN DATABASE
 
         :param pi:
         :param emission:
