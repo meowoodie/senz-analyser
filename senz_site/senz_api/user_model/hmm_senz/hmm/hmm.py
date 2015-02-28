@@ -405,10 +405,9 @@ class HMM:
     def getEmission(self):
         emission_p = {}
         for state in self.hHiddenState:
-            output_index = 0
+            emission_p[state] = []
             for output in self.hVisibleOutput:
-                emission_p[state][output_index] = self.hEmissionP[state][output]
-                output_index += 1
+                emission_p[state].append(self.hEmissionP[state][output])
         return emission_p
 
     def getOutputSeq(self):
