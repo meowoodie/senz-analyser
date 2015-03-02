@@ -8,26 +8,35 @@ class DataHandler(object):
     def __init__(self, uuid):
         # Init user info model,
         # - Get user info from database
-        user = UserInfo(uuid)
+        self.user = UserInfo(uuid)
         # Init user motion model
-        user_motion = UserMotion(user.getUserID())
+        self.userMotion = UserMotion(self.user.getUserID())
         # Init user poi model
-        user_poi    = UserPOI(user.getUserID())
+        self.userPOI    = UserPOI(self.user.getUserID())
 
-        state = user_motion.getLatestMotionState()
-        poi_info = user_poi.getLatestPOIInfo()
-        poi_type = poi_info[0]["poiType"]
+
+
+    def getUserSenz(self, motion_count=100, poi_count=5, sound_count=100):
+
+        state_info = self.userMotion.getLatestMotionState(motion_count)
+        poi_info   = self.user_poi.getLatestPOIInfo(poi_count)
+
+        latest_state = state_info["state"]
+        poi_type     = poi_info["poiType"]
 
         output_tuple = {
-            "motion"   : state,
+            "motion"   : latest_state,
             "location" : poi_type
         }
-        print output_tuple
-        user_senz = UserSenz(user.getUserID())
+        print "tuple:", output_tuple
+
+        user_senz = UserSenz(self.user.getUserID(), output_tuple)
+        
 
 if __name__ == "__main__":
 
     m = DataHandler("test_user_mac")
+    m.getUserSenz()
 
 
 
