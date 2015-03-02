@@ -78,6 +78,9 @@ class UserMotion(AVObject, ServiceAPI):
         GET LATEST MOTION STATE
 
         :return:
+            - motion state
+            - motion sample start time
+            - motion sample end time
         '''
         # Get the set of latest motion data according to user id from Database.
         # - The motion data is a list.
@@ -91,6 +94,9 @@ class UserMotion(AVObject, ServiceAPI):
         for motion_data in self.motionData:
             raw_data_list.append(motion_data["rawData"])
             object_id_list.append(motion_data["objectId"])
+        # Extract the start time and end time.
+        start_time = self.motionData[len(self.motionData)-1]["timestamp"]
+        end_time   = self.motionData[0]["timestamp"]
         # Get the state of set of latest motion data.
         self.state = self._queryMotionStateByMotionData(raw_data_list)
         # Store the result(state of motion data) into Database.
@@ -98,7 +104,12 @@ class UserMotion(AVObject, ServiceAPI):
             object_id_list, # The list of object id which need to be updated
             self.state      # The update value of state
         )
-        return self.state
+        # The result.
+        return {
+            "state": self.state,
+            "startTime": start_time,
+            "endTime": end_time
+        }
 
     def getLastMotionState(self):
         '''
