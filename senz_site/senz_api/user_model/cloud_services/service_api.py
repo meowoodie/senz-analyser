@@ -74,12 +74,10 @@ class ServiceAPI(object):
 
     @classmethod
     def getPOIInfoFromCloudService(cls, poi_data):
-        result = [
-            {
-                "poiType": "SHOPPING",
-                "locDescription": "Xidan Dayuecheng"
-            }
-        ]
+        result = {
+            "poiType": "Shopping",
+            "locDescription": "Xidan Dayuecheng"
+        }
         return result
 
 
