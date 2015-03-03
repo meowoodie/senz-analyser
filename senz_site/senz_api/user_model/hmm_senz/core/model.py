@@ -7,13 +7,21 @@ __author__ = 'woodie'
 # Hidden state set
 DEFAULT_HIDDEN_STATE = ("WORK", "LIVE", "RELAX", "ENTERTAIN", "EXERCISE")
 # Visible output set
-
-# - Location = ("ENTERTAINMENT", "COMMUNITY", "GOVERNMENT", "CATERING", "EDUCATION",
-#               "TRAFFIC", "FINANCE", "TRAVEL", "HOTEL", "COMPANY",
-#               "SHOPPING", "MEDICAL", "BUSINESS")
-DEFAULT_LOCATION     = ("EDUCATION", "SHOPPING", "COMMUNITY")
+DEFAULT_LOCATION     = (
+    "PUBLIC_PLACE",
+    "COMMUNITY",
+    "OFFICE",
+    "ON_THE_WAY",
+    "SCHOOL",
+    "HOSPITAL",
+    "MALL",
+    "RESTAURANT",
+    "SCENIC",
+    "SERVICE",
+    "OTHER"
+)
 # - Motion   = ("SITTING", "WALKING", "RUNNING", "RIDING", "DRIVING")
-DEFAULT_MOTION       = ("SITTING", "WALKING", "RUNNING")
+DEFAULT_MOTION       = ("SITTING", "DRIVING", "RIDING", "WALKING", "RUNNING")
 # - Sound    = ("")
 DEFAULT_SOUND        = ()
 
