@@ -8,6 +8,7 @@ class ServiceAPI(object):
     get_sound_scence_api = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_sound_scence_url
     get_poi_info_api     = settings.protocol + settings.server_ip["Aliyun1"] + settings.get_poi_info_url
     state_code_set       = settings.state_code_set
+    location_code_set    = settings.location_code_set
 
     def __init__(self):
         pass
@@ -76,8 +77,7 @@ class ServiceAPI(object):
     def getPOIInfoFromCloudService(cls, poi_info_post):
         # Init the param
         param = poi_info_post
-        poi_type = settings.location_code_set["leisure"]
-        # Query the motion state from cloud service,
+        # Query the poi info from cloud service,
         # Then decode the result to json.
         result = json.loads(requests.post(
             ServiceAPI.get_poi_info_api,
@@ -86,11 +86,17 @@ class ServiceAPI(object):
             headers=cls._headers()
         ).content)
 
-        result = {
-            "poiType": poi_type,
-            "locDescription": "Xidan Dayuecheng"
-        }
-        return result
+        if result["status"] is 1:
+            # Transfer poi type to location type
+            for gps in result["results"]["GPS"]:
+                gps["locType"] = ServiceAPI.location_code_set[gps["poiType"]]
+            for ibeacon in result["results"]["iBeacon"]:
+                ibeacon["locType"] = ServiceAPI.location_code_set[ibeacon["poiType"]]
+            return result["results"]
+        else:
+            return None
+
+
 
 
 

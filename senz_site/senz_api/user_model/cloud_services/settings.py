@@ -11,7 +11,7 @@ server_ip = {
 # The service api url
 get_motion_state_url = ":9001/predictByRawData/"
 get_sound_scence_url = ""
-get_poi_info_url     = ""
+get_poi_info_url     = ":9003/senz/poi_Gpeacon/"
 
 # Other params
 # --- state code :
@@ -23,46 +23,36 @@ get_poi_info_url     = ""
 state_code_set = ["SITTING", "DRIVING", "RIDING", "WALKING", "RUNNING"]
 
 # --- poi type code:
-# - PUBLIC_PLACE -> 休闲场所
-# - COMMUNITY    -> 社区
-# - OFFICE       -> 办公地点
-# - ON_THE_WAY   -> 路上
-# - SCHOOL       -> 学校
-# - HOSPITAL     -> 医院
-# - MALL         -> 商场
-# - RESTAURANT   -> 餐厅
-# - SCENIC       -> 旅游景点
-# - SERVICE      -> 生活服务
 location_code_set = {
     # Public place
-    "leisure":        "PUBLIC_PLACE",# 休闲娱乐
+    "leisure":        "PUBLIC_PLACE",
     # Community
-    "neighborhood":   "COMMUNITY",# 地产小区
-    "estate":         "COMMUNITY",# 房地产
+    "neighborhood":   "COMMUNITY",
+    "estate":         "COMMUNITY",
     # Office
-    "government":     "OFFICE",# 政府机构
-    "company":        "OFFICE",# 公司企业
-    "finance":        "OFFICE",# 金融
+    "government":     "OFFICE",
+    "company":        "OFFICE",
+    "finance":        "OFFICE",
     # Restaurant
-    "canteen":        "RESTAURANT",# 餐饮
-    "tasty":          "RESTAURANT",# 美食
+    "canteen":        "RESTAURANT",
+    "tasty":          "RESTAURANT",
     # School
-    "education":      "SCHOOL",# 教育
-    "training":       "SCHOOL",# 教育培训
+    "education":      "SCHOOL",
+    "training":       "SCHOOL",
     # On the way
-    "transportation": "ON_THE_WAY",# 交通设施
+    "transportation": "ON_THE_WAY",
     # Scenic
-    "landmark":       "SCENIC",# 行政地标
-    "scene":          "SCENIC",# 旅游景点
+    "landmark":       "SCENIC",
+    "scene":          "SCENIC",
     # Service
-    "service":        "SERVICE",# 生活服务
+    "service":        "SERVICE",
     # Mall
-    "shopping":       "MALL",# 购物
+    "shopping":       "MALL",
     # Hospital
-    "hospital":       "HOSPITAL",# 医疗
+    "hospital":       "HOSPITAL",
     # Other
-    "car":            "OTHER",# 汽车服务
-    "other":          "OTHER" # 其他
+    "car":            "OTHER",
+    "other":          "OTHER"
 }
 
 # Debug url
