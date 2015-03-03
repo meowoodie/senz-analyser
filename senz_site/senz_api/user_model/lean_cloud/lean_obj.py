@@ -2,6 +2,7 @@ import requests
 import json
 import settings
 import datetime
+import time
 
 class AVObject(object):
     base = r'https://leancloud.cn' #cn.avoscloud.com
@@ -306,3 +307,8 @@ class AVObject(object):
             "objectId":  obId
         }
         return _pointer
+
+    @classmethod
+    def iso2timestamp(cls, iso_time): #avos date type {u'__type': u'Date', u'iso': u'2015-05-23T11:15:00.000Z'}
+        t = time.strptime(iso_time, "%Y-%m-%dT%H:%M:%S.000Z")
+        return long(time.mktime(t))
