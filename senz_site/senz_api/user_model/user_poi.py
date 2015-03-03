@@ -47,8 +47,8 @@ class UserPOI(AVObject, ServiceAPI):
 
 
 
-    def _queryPOIInfoByPOIData(self, poi_info_list):
-        return self.getPOIInfoFromCloudService(poi_info_list)
+    def _queryPOIInfoByPOIData(self, poi_info_post):
+        return self.getPOIInfoFromCloudService(poi_info_post)
 
 
 
@@ -83,27 +83,37 @@ class UserPOI(AVObject, ServiceAPI):
             poi_count
         )
         # Extract the poi data & object id from motion data
-        poi_data_list  = []
+        poi_info_post  = {
+            "userId": self.userId,
+            "GPS": [],
+            "iBeacon": []
+        }
         object_id_list = []
         for poi_data in self.poiData:
             # poi info
-            poi_data_post = {
-                "locGPS":    {
-                    "latitude": poi_data["locGPS"]["latitude"],
-                    "longitude": poi_data["locGPS"]["longitude"]
-                },
-                "locBeacon": poi_data["locBeacon"]
-            }
-            poi_data_list.append(poi_data_post)
+            if poi_data["locGPS"] is not None:
+                tmp = {}
+                tmp["latitude"]  = poi_data["locGPS"]["latitude"]
+                tmp["longitude"] = poi_data["locGPS"]["longitude"]
+                tmp["timestamp"] = poi_data["timestamp"]
+                poi_info_post["GPS"].append(tmp)
+            if poi_data["locBeacon"] is not None:
+                tmp = {}
+                tmp["uuid"]      = poi_data["locBeacon"]["uuid"]
+                tmp["major"]     = poi_data["locBeacon"]["major"]
+                tmp["minor"]     = poi_data["locBeacon"]["minor"]
+                tmp["rssi"]      = poi_data["locBeacon"]["rssi"]
+                tmp["timestamp"] = poi_data["timestamp"]
+                poi_info_post["iBeacon"].append(tmp)
             # object id
             object_id_list.append(poi_data["objectId"])
         # Get the latest poi type&description set of poi data.
-        self.poiInfoList = self._queryPOIInfoByPOIData(poi_data_list)
+        self.poiInfoList = self._queryPOIInfoByPOIData(poi_info_post)
         # Store the result into Database.
-        self._updatePOIInfoInDatabase(
-            object_id_list,  # The list of object id which need to be updated
-            self.poiInfoList # The update value of poi info
-        )
+        # self._updatePOIInfoInDatabase(
+        #     object_id_list,  # The list of object id which need to be updated
+        #     self.poiInfoList # The update value of poi info
+        # )
         return self.poiInfoList
 
 if __name__ == "__main__":
