@@ -37,7 +37,7 @@ class UserSenz(Senz, AVObject):
         self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
         # Get the latest visible output list during this (year/month/week/day).
-        senz_info_list = self._getLatestSenzInfoListByUserId(self.during["THIS_DAY"])
+        senz_info_list = self._getLatestSenzInfoListByUserId(self.during["THIS_WEEK"])
 
         visible_output_list = []
         object_id_list = []

@@ -19,18 +19,78 @@ pi = {"WORK": 0.6, "LIVE": 0.1, "RELAX": 0.05, "ENTERTAIN": 0.2, "EXERCISE": 0.0
 #     "COMMUNITY": {"WORK": 0.2, "LIVE": 0.4, "RELAX": 0.15, "ENTERTAIN": 0.05, "EXERCISE": 0.2}
 # }
 motion_condition = {
-    "WORK": {"SITTING": 0.9, "WALKING": 0.09, "RUNNING": 0.01},
-    "LIVE": {"SITTING": 0.5, "WALKING": 0.45, "RUNNING": 0.05},
-    "RELAX": {"SITTING": 0.85, "WALKING": 0.13, "RUNNING": 0.02},
-    "ENTERTAIN": {"SITTING": 0.2, "WALKING": 0.7, "RUNNING": 0.1},
-    "EXERCISE": {"SITTING": 0.05, "WALKING": 0.1, "RUNNING": 0.85}
+    "WORK": {"SITTING": 0.9, "WALKING": 0.07, "RUNNING": 0.01, "RIDING": 0.01, "DRIVING": 0.01},
+    "LIVE": {"SITTING": 0.4, "WALKING": 0.35, "RUNNING": 0.04, "RIDING": 0.01, "DRIVING": 0.2},
+    "RELAX": {"SITTING": 0.85, "WALKING": 0.11, "RUNNING": 0.02, "RIDING": 0.01, "DRIVING": 0.01},
+    "ENTERTAIN": {"SITTING": 0.2, "WALKING": 0.5, "RUNNING": 0.1, "RIDING": 0.1, "DRIVING": 0.1},
+    "EXERCISE": {"SITTING": 0.05, "WALKING": 0.1, "RUNNING": 0.55, "RIDING": 0.29, "DRIVING": 0.01}
 }
 location_condition = {
-    "WORK": {"EDUCATION": 0.6, "SHOPPING": 0.01, "COMMUNITY": 0.39},
-    "LIVE": {"EDUCATION": 0.3, "SHOPPING": 0.05, "COMMUNITY": 0.65},
-    "RELAX": {"EDUCATION": 0.15, "SHOPPING": 0.55, "COMMUNITY": 0.3},
-    "ENTERTAIN": {"EDUCATION": 0.1, "SHOPPING": 0.8, "COMMUNITY": 0.1},
-    "EXERCISE": {"EDUCATION": 0.2, "SHOPPING": 0.4, "COMMUNITY": 0.4}
+    "WORK": {
+        "PUBLIC_PLACE": 0.001,
+        "COMMUNITY":    0.1,
+        "OFFICE":       0.6,
+        "ON_THE_WAY":   0.001,
+        "SCHOOL":       0.3,
+        "HOSPITAL":     0.001,
+        "MALL":         0.001,
+        "RESTAURANT":   0.001,
+        "SCENIC":       0.001,
+        "SERVICE":      0.001,
+        "OTHER":        0.001
+    },
+    "LIVE": {
+        "PUBLIC_PLACE": 0.1,
+        "COMMUNITY":    0.5,
+        "OFFICE":       0.1,
+        "ON_THE_WAY":   0.001,
+        "SCHOOL":       0.3,
+        "HOSPITAL":     0.001,
+        "MALL":         0.001,
+        "RESTAURANT":   0.001,
+        "SCENIC":       0.001,
+        "SERVICE":      0.001,
+        "OTHER":        0.001
+    },
+    "RELAX": {
+        "PUBLIC_PLACE": 0.3,
+        "COMMUNITY":    0.1,
+        "OFFICE":       0.001,
+        "ON_THE_WAY":   0.001,
+        "SCHOOL":       0.001,
+        "HOSPITAL":     0.001,
+        "MALL":         0.1,
+        "RESTAURANT":   0.1,
+        "SCENIC":       0.2,
+        "SERVICE":      0.2,
+        "OTHER":        0.001
+    },
+    "ENTERTAIN": {
+        "PUBLIC_PLACE": 0.4,
+        "COMMUNITY":    0.1,
+        "OFFICE":       0.001,
+        "ON_THE_WAY":   0.001,
+        "SCHOOL":       0.001,
+        "HOSPITAL":     0.001,
+        "MALL":         0.001,
+        "RESTAURANT":   0.1,
+        "SCENIC":       0.4,
+        "SERVICE":      0.001,
+        "OTHER":        0.001
+    },
+    "EXERCISE": {
+        "PUBLIC_PLACE": 0.2,
+        "COMMUNITY":    0.3,
+        "OFFICE":       0.001,
+        "ON_THE_WAY":   0.2,
+        "SCHOOL":       0.1,
+        "HOSPITAL":     0.001,
+        "MALL":         0.001,
+        "RESTAURANT":   0.001,
+        "SCENIC":       0.1,
+        "SERVICE":      0.1,
+        "OTHER":        0.001
+    }
 }
 
 m = model.SenzModel()

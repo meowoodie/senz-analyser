@@ -22,15 +22,9 @@ class DataHandler(object):
         poi_info   = self.userPOI.getLatestPOIInfo(poi_count)
 
         latest_state = state_info["state"]
-        poi_type     = poi_info["poiType"]
+        loc_type     = poi_info["locType"]
 
-        output_tuple = {
-            "motion"   : latest_state,
-            "location" : poi_type
-        }
-        print "tuple:", output_tuple
-
-        # user_senz = UserSenz(self.user.getUserID(), output_tuple)
+        user_senz = UserSenz(self.user.getUserID(), motion=latest_state, location=loc_type)
 
 
 if __name__ == "__main__":
