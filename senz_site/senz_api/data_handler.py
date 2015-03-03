@@ -19,7 +19,7 @@ class DataHandler(object):
     def getUserSenz(self, motion_count=100, poi_count=5, sound_count=100):
 
         state_info = self.userMotion.getLatestMotionState(motion_count)
-        poi_info   = self.user_poi.getLatestPOIInfo(poi_count)
+        poi_info   = self.userPOI.getLatestPOIInfo(poi_count)
 
         latest_state = state_info["state"]
         poi_type     = poi_info["poiType"]
@@ -30,8 +30,8 @@ class DataHandler(object):
         }
         print "tuple:", output_tuple
 
-        user_senz = UserSenz(self.user.getUserID(), output_tuple)
-        
+        # user_senz = UserSenz(self.user.getUserID(), output_tuple)
+
 
 if __name__ == "__main__":
 

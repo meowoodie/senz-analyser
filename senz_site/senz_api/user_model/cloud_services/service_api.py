@@ -73,9 +73,21 @@ class ServiceAPI(object):
 
 
     @classmethod
-    def getPOIInfoFromCloudService(cls, poi_data):
+    def getPOIInfoFromCloudService(cls, poi_info_post):
+        # Init the param
+        param = poi_info_post
+        poi_type = settings.location_code_set["leisure"]
+        # Query the motion state from cloud service,
+        # Then decode the result to json.
+        result = json.loads(requests.post(
+            ServiceAPI.get_poi_info_api,
+            # ServiceAPI.debug_api,
+            data=json.dumps(param),
+            headers=cls._headers()
+        ).content)
+
         result = {
-            "poiType": "Shopping",
+            "poiType": poi_type,
             "locDescription": "Xidan Dayuecheng"
         }
         return result
