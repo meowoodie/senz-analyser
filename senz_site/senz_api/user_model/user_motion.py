@@ -122,3 +122,4 @@ class UserMotion(AVObject, ServiceAPI):
 if __name__ == "__main__":
 
     m = UserMotion("54d82fefe4b0d414801050ee")
+    print m.getLatestMotionState()
