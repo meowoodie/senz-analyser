@@ -1,6 +1,8 @@
-from senz_api.lean_cloud.lean_obj import AVObject
+from lean_cloud.lean_obj import AVObject
+from cloud_services.service_api import ServiceAPI
+import json
 
-class UserMotion(AVObject):
+class UserSound(AVObject):
 
     DEFAULT_STATE   = 'SITTING'
     DEFAULT_RAWDATA = {}

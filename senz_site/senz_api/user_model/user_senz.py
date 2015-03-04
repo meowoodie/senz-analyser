@@ -18,7 +18,7 @@ class UserSenz(Senz, AVObject):
         "light"
     )
 
-    def __init__(self, user_id, **output_tuple):
+    def __init__(self, user_id, during_time="THIS_DAY", **output_tuple):
         self.userId = user_id
         self.outputListDuring   = [] # The latest output list during * from Database
         self.outputTupleCurrent = {} # The Current output tuple (made by other model's computing result)
@@ -37,7 +37,7 @@ class UserSenz(Senz, AVObject):
         self._addNewOutputTupleInDatabase(self.outputTupleCurrent)
 
         # Get the latest visible output list during this (year/month/week/day).
-        senz_info_list = self._getLatestSenzInfoListByUserId(self.during["THIS_WEEK"])
+        senz_info_list = self._getLatestSenzInfoListByUserId(self.during[during_time])
 
         visible_output_list = []
         object_id_list = []
@@ -49,6 +49,8 @@ class UserSenz(Senz, AVObject):
 
         # Get the new list of Senz.
         new_senz_list = self._getNewUserSenz(visible_output_list, old_senz_list)
+        # Save the result in current object
+        self.senzList = new_senz_list
 
         # Update Senz in Database.
         self._updateSenzInDatabase(
@@ -131,9 +133,16 @@ class UserSenz(Senz, AVObject):
 
 
 
+    # PUBLIC METHOD
+    def getLatestSenzList(self):
+        return self.senzList
+
+
+
 if __name__ == "__main__":
 
-    m = UserSenz("54d82fefe4b0d414801050ee", motion="SITTING", location="EDUCATION")
+    m = UserSenz("54d82fefe4b0d414801050ee", during_time="THIS_WEEK", motion="SITTING", location="EDUCATION")
+
 
 
 

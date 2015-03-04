@@ -58,7 +58,7 @@ class UserMotion(AVObject, ServiceAPI):
 
 
 
-    def _updateStateInDatabase(self, object_id_list, state = "UNKNOWN"):
+    def _updateStateInDatabase(self, object_id_list, state=DEFAULT_STATE):
         # Create the dict of update data
         update_data_list = []
         for ob in object_id_list:
