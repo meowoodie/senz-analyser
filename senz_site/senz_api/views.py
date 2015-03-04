@@ -4,13 +4,10 @@ from data_handler import DataHandler
 
 def Senz(request):
 
-    try:
-        if request.method == 'POST':
-            body = json.loads(request.body)  #body is deprecated
-        else:
-            return errorResponses("Method Error")
-    except:
-        return errorResponses()
+    if request.method == 'POST':
+        body = json.loads(request.body)  #body is deprecated
+    else:
+        return HttpResponse("Error!")
 
     user_mac     = body["userMac"]
     motion_count = body["motionCount"]

@@ -8,5 +8,5 @@ urlpatterns = patterns('senz_api.views',
     # url(r'^$', 'senz_site.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^$', Senz)
+    url(r'^senz/$', Senz)
 )
